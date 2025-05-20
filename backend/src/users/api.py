@@ -1,11 +1,10 @@
 import logging
 
-from fastapi import APIRouter, HTTPException
-from pydantic import UUID4
-
 from db import DBSessionDep
 from db.models import User, UserCreate, UserPublic, UserUpdate
-
+from fastapi import APIRouter, HTTPException
+from pydantic import UUID4
+from sqlmodel import select
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +31,13 @@ def read_user(user_id: UUID4, session: DBSessionDep) -> UserPublic:
     return user
 
 
+@router.get("/")
+def read_all_users(session: DBSessionDep) -> list[UserPublic]:
+    users = session.exec(select(User)).all()
+    logger.info(f"Retrieved {len(users)} users")
+    return users
+
+
 @router.delete("/{user_id}")
 def delete_user(user_id: UUID4, session: DBSessionDep) -> None:
     user = session.get(User, user_id)
@@ -46,7 +52,7 @@ def delete_user(user_id: UUID4, session: DBSessionDep) -> None:
 @router.patch("/{user_id}")
 def update_user(
     user_id: UUID4, user_details: UserUpdate, session: DBSessionDep
-) -> User:
+) -> UserPublic:
     user = session.get(User, user_id)
     if not user:
         logger.warning(f"User with ID {user_id} not found")

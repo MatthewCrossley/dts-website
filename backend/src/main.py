@@ -1,10 +1,11 @@
 import logging
 import sys
 
-from fastapi import FastAPI
-from users.api import router as users_router
+from auth import auth_check
 from db import startup as db_startup
-
+from fastapi import Depends, FastAPI
+from tasks.api import router as tasks_router
+from users.api import router as users_router
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -23,7 +24,6 @@ app = FastAPI(
     description="Backend for TODO app",
     version="0.1.0",
 )
-app.include_router(users_router)
 
 
 @app.on_event("startup")
@@ -31,3 +31,7 @@ def startup():
     logger.info("Starting up...")
     db_startup()
     logger.info("Startup complete.")
+
+
+app.include_router(users_router)
+app.include_router(tasks_router, dependencies=[Depends(auth_check)])
