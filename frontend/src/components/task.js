@@ -1,6 +1,6 @@
 export default function Task({ task }) {
   return (
-    <a href={`/tasks/${task.id}`}>
+    <a href={`/task/${task.id}`}>
       <div class="task">
         <h3>{task.title}</h3>
         <p>{task.description}</p>

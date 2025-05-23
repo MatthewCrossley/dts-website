@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import NavBar from "./components/navbar";
 import HomePage from "./pages/homepage";
 import LoginPage from "./pages/login";
+import TaskPage from "./pages/task";
 
 export default function App() {
   return (
@@ -16,6 +17,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/task/:taskId"
+          element={
+            <ProtectedRoute>
+              <TaskPage />
             </ProtectedRoute>
           }
         />
