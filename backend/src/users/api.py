@@ -1,5 +1,6 @@
 import logging
 
+from auth import AuthCheckDep
 from db import DBSessionDep
 from db.models import User, UserCreate, UserPublic, UserUpdate
 from fastapi import APIRouter, HTTPException
@@ -19,6 +20,11 @@ def create_user(user_details: UserCreate, session: DBSessionDep) -> UUID4:
     session.refresh(user)
     logger.info(f"User {user.username} created with ID {user.id}")
     return user.id
+
+
+@router.get("/current")
+def current_user(user: AuthCheckDep) -> UserPublic:
+    return user
 
 
 @router.get("/{user_id}")

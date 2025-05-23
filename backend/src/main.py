@@ -4,6 +4,7 @@ import sys
 from auth import auth_check
 from db import startup as db_startup
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from tasks.api import router as tasks_router
 from users.api import router as users_router
 
@@ -23,6 +24,14 @@ app = FastAPI(
     title="TODO-Backend",
     description="Backend for TODO app",
     version="0.1.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
