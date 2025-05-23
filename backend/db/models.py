@@ -45,8 +45,8 @@ class TaskCreate(TaskBase):
 
 
 class TaskUpdate(TaskBase):
-    title: str | None = None
-    description: str | None = None
+    title: str | None = Field(default=None, min_length=1, max_length=256)
+    description: str | None = Field(default=None, max_length=2048)
     assigned_to: UUID | None = None
     completed: bool | None = None
     due: datetime | None = None

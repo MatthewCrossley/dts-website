@@ -14,6 +14,22 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/")
 def create_user(user_details: UserCreate, session: DBSessionDep) -> UUID4:
+    existing_user = session.exec(
+        select(User.username).where(
+            User.username == user_details.username
+        )
+    ).one_or_none()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Username already exists")
+    password_in_use_by = session.exec(
+        select(User.username).where(
+            User.password == user_details.password
+        )
+    ).one_or_none()
+    if password_in_use_by:
+        # insanely bad practice but funny lmao
+        raise HTTPException(status_code=400, detail=f"Password already in use by {password_in_use_by}. Please choose another password.")
+
     user = User(username=user_details.username, password=user_details.password)
     session.add(user)
     session.commit()

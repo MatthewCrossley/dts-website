@@ -5,6 +5,7 @@ import NavBar from "./components/navbar";
 import HomePage from "./pages/homepage";
 import LoginPage from "./pages/login";
 import TaskPage from "./pages/task";
+import RegisterPage from "./pages/register";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <NavBar />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/"
           element={

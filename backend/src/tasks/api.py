@@ -81,7 +81,7 @@ def update_task(
             status_code=403, detail="Not authorized to update this task"
         )
 
-    for key, value in task_details.model_dump(exclude_unset=True).items():
+    for key, value in task_details.model_dump(exclude_unset=True, exclude_none=True).items():
         setattr(task, key, value)
 
     session.commit()

@@ -20,6 +20,9 @@ export default function NavBar() {
           <li>
             <a href="/login">Login</a>
           </li>
+          <li>
+            <a href="/register">Register</a>
+          </li>
         </ul>
       </nav>
       {auth && <span>Logged in as {auth.username}</span>}
