@@ -23,6 +23,9 @@ export default function NavBar() {
           <li>
             <a href="/register">Register</a>
           </li>
+          <li>
+            <a href="/users">Users</a>
+          </li>
         </ul>
       </nav>
       {auth && <span>Logged in as {auth.username}</span>}

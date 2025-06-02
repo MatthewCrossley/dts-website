@@ -59,6 +59,9 @@ export default function TaskPage() {
 
     let request;
     if (e.nativeEvent.submitter.id === "delete") {
+      if (!window.confirm("Are you sure you want to delete this task?")) {
+        return;
+      }
       request = fetch(`http://localhost:8000/tasks/${taskId}`, {
         method: "DELETE",
         headers: {
