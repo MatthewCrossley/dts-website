@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAuth } from "../utils/auth";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function TaskPage() {
   const { taskId } = useParams();
@@ -9,6 +9,7 @@ export default function TaskPage() {
   const [users, setUsers] = useState([]);
   const [creator, setCreator] = useState(null);
   const auth = getAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`http://localhost:8000/tasks/${taskId}`, {
@@ -39,24 +40,38 @@ export default function TaskPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    fetch(`http://localhost:8000/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
-      },
-      body: JSON.stringify(task),
-    })
-      .then(async response => {
-        if (!response.ok) {
-          document.querySelector(".error-message").textContent = await response.text();
-          return
-        }
-        setTask(await response.json())
-      })
-      .catch((error) => {
-        document.querySelector(".error-message").textContent = error;
+
+    let request;
+    if (e.nativeEvent.submitter.id === "delete") {
+      request = fetch(`http://localhost:8000/tasks/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
+        },
+      }).then(() => {
+        navigate("/");
       });
+    } else {
+      request = fetch(`http://localhost:8000/tasks/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
+        },
+        body: JSON.stringify(task),
+      }).then(async (response) => {
+        if (!response.ok) {
+          document.querySelector(".error-message").textContent =
+            await response.text();
+          return;
+        }
+        setTask(await response.json());
+      });
+    }
+
+    return request.catch((error) => {
+      document.querySelector(".error-message").textContent = error;
+    });
   }
 
   return (
@@ -132,6 +147,10 @@ export default function TaskPage() {
         </div>
 
         <button type="submit">Save Changes</button>
+        <br />
+        <button type="submit" id="delete">
+          Delete task
+        </button>
         <div className="error-message"></div>
       </form>
     </>
