@@ -4,7 +4,7 @@ export default function Task({ task }) {
       <div class="task">
         <h3>{task.title}</h3>
         <p>{task.description}</p>
-        <p>Due: {new Date(task.due).toLocaleString()}</p>
+        <p>Due: {task.due ? new Date(task.due).toLocaleString() : "No due date"}</p>
       </div>
     </a>
   );

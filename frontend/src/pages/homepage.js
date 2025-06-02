@@ -20,7 +20,9 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1>Your Tasks</h1>
+      <span><h1>Your Tasks</h1>
+      <a href="/task">Create Task</a>
+      </span>
       <div class="task-list">
         {tasks.map((task) => (
           <Task task={task} />

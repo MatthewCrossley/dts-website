@@ -12,12 +12,28 @@ export default function TaskPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:8000/tasks/${taskId}`, {
-      headers: {
-        Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
-      },
-    })
-      .then((response) => response.json())
+    let request;
+    if (!taskId || taskId.length === 0) {
+      request = new Promise((resolve) => {
+        resolve({
+          title: "",
+          description: "",
+          completed: false,
+          due: null,
+          assigned_to: null,
+          created_by: auth.id,
+          created_at: new Date().toString(),
+        });
+      });
+    } else {
+      request = fetch(`http://localhost:8000/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
+        },
+      }).then((response) => response.json());
+    }
+
+    request
       .then((data) => {
         setTask(data);
         return data;
@@ -52,20 +68,37 @@ export default function TaskPage() {
         navigate("/");
       });
     } else {
-      request = fetch(`http://localhost:8000/tasks/${taskId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
-        },
-        body: JSON.stringify(task),
-      }).then(async (response) => {
+      if (!taskId || taskId.length === 0) {
+        request = fetch("http://localhost:8000/tasks/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
+          },
+          body: JSON.stringify(task),
+        });
+      } else {
+        request = fetch(`http://localhost:8000/tasks/${taskId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
+          },
+          body: JSON.stringify(task),
+        });
+      }
+      request = request.then(async (response) => {
         if (!response.ok) {
           document.querySelector(".error-message").textContent =
             await response.text();
           return;
         }
-        setTask(await response.json());
+
+        if (!taskId || taskId.length === 0) {
+          navigate(`/task/${await response.json()}`);
+        } else {
+          setTask(await response.json());
+        }
       });
     }
 

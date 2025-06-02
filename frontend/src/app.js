@@ -23,7 +23,7 @@ export default function App() {
           }
         />
         <Route
-          path="/task/:taskId"
+          path="/task/:taskId?"
           element={
             <ProtectedRoute>
               <TaskPage />
