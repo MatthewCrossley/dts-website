@@ -5,23 +5,23 @@ from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
-    username: str = Field(index=True, unique=True)
+    username: str = Field(index=True, unique=True, min_length=8, max_length=128)
 
 
 class User(UserBase, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True, index=True, unique=True)
-    password: str
+    password: str = Field(min_length=8, max_length=128)
     admin: bool = Field(default=False)
 
 
 class UserCreate(UserBase):
-    password: str
+    password: str = Field(min_length=8, max_length=128)
     admin: bool = False
 
 
 class UserUpdate(UserBase):
-    username: str | None = None
-    password: str | None = None
+    username: str | None = Field(default=None, min_length=8, max_length=128)
+    password: str | None = Field(default=None, min_length=8, max_length=128)
 
 
 class UserPublic(UserBase):
