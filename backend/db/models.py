@@ -11,10 +11,12 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True, index=True, unique=True)
     password: str
+    admin: bool = Field(default=False)
 
 
 class UserCreate(UserBase):
     password: str
+    admin: bool = False
 
 
 class UserUpdate(UserBase):
@@ -24,6 +26,7 @@ class UserUpdate(UserBase):
 
 class UserPublic(UserBase):
     id: UUID
+    admin: bool = False
 
 
 class TaskBase(SQLModel):

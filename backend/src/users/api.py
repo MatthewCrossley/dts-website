@@ -15,22 +15,25 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.post("/")
 def create_user(user_details: UserCreate, session: DBSessionDep) -> UUID4:
     existing_user = session.exec(
-        select(User.username).where(
-            User.username == user_details.username
-        )
+        select(User.username).where(User.username == user_details.username)
     ).one_or_none()
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists")
     password_in_use_by = session.exec(
-        select(User.username).where(
-            User.password == user_details.password
-        )
+        select(User.username).where(User.password == user_details.password)
     ).one_or_none()
     if password_in_use_by:
         # insanely bad practice but funny lmao
-        raise HTTPException(status_code=400, detail=f"Password already in use by {password_in_use_by}. Please choose another password.")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Password already in use by {password_in_use_by}. Please choose another password.",
+        )
 
-    user = User(username=user_details.username, password=user_details.password)
+    user = User(
+        username=user_details.username,
+        password=user_details.password,
+        admin=user_details.admin,
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -61,29 +64,38 @@ def read_all_users(session: DBSessionDep) -> list[UserPublic]:
 
 
 @router.delete("/{user_id}")
-def delete_user(user_id: UUID4, session: DBSessionDep) -> None:
-    user = session.get(User, user_id)
-    if not user:
+def delete_user(user_id: UUID4, session: DBSessionDep, user: AuthCheckDep) -> None:
+    user_to_delete = session.get(User, user_id)
+    if not user_to_delete:
         logger.warning(f"User with ID {user_id} not found")
         raise HTTPException(status_code=404, detail="User not found")
-    session.delete(user)
+
+    if user_to_delete.id != user.id and not user.admin:
+        logger.warning(
+            f"User {user_to_delete.username} not authorized to delete user with ID {user_id}"
+        )
+        raise HTTPException(
+            status_code=403,
+            detail="Not authorized to delete this user. You are not an admin or the user being deleted",
+        )
+    session.delete(user_to_delete)
     session.commit()
-    logger.info(f"User {user.username} deleted with ID {user.id}")
+    logger.info(f"User {user_to_delete.username} deleted with ID {user_to_delete.id}")
 
 
 @router.patch("/{user_id}")
 def update_user(
     user_id: UUID4, user_details: UserUpdate, session: DBSessionDep
 ) -> UserPublic:
-    user = session.get(User, user_id)
-    if not user:
+    user_to_update = session.get(User, user_id)
+    if not user_to_update:
         logger.warning(f"User with ID {user_id} not found")
         raise HTTPException(status_code=404, detail="User not found")
     if user_details.username:
-        user.username = user_details.username
+        user_to_update.username = user_details.username
     if user_details.password:
-        user.password = user_details.password
+        user_to_update.password = user_details.password
     session.commit()
-    session.refresh(user)
-    logger.info(f"User {user.username} updated with ID {user.id}")
-    return user
+    session.refresh(user_to_update)
+    logger.info(f"User {user_to_update.username} updated with ID {user_to_update.id}")
+    return user_to_update

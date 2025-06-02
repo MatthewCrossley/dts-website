@@ -46,15 +46,15 @@ def delete_task(task_id: UUID4, session: DBSessionDep, user: AuthCheckDep) -> No
     task = session.get(Task, task_id)
     if not task:
         logger.warning(f"Task with ID {task_id} not found")
-        raise HTTPException(status_code=404, detail="User not found")
-    if task.created_by != user.id and (
-        task.assigned_to and task.assigned_to != user.id
-    ):
+        raise HTTPException(status_code=404, detail="User not found")  #
+
+    if not (task.created_by == user.id or task.assigned_to == user.id or user.admin):
         logger.warning(
             f"User {user.username} not authorized to delete task {task.title!r}"
         )
         raise HTTPException(
-            status_code=403, detail="Not authorized to delete this task"
+            status_code=403,
+            detail="Not authorized to delete this task. You must be the creator, assigned user or an admin",
         )
 
     session.delete(task)
@@ -71,17 +71,17 @@ def update_task(
         logger.warning(f"Task with ID {task_id} not found")
         raise HTTPException(status_code=404, detail="User not found")
 
-    if task.created_by != user.id and (
-        task.assigned_to and task.assigned_to != user.id
-    ):
+    if not (task.created_by == user.id or task.assigned_to == user.id or user.admin):
         logger.warning(
             f"User {user.username} not authorized to update task {task.title!r}"
         )
         raise HTTPException(
-            status_code=403, detail="Not authorized to update this task"
+            status_code=403, detail="Not authorized to update this task. You must be the creator, assigned user or an admin"
         )
 
-    for key, value in task_details.model_dump(exclude_unset=True, exclude_none=True).items():
+    for key, value in task_details.model_dump(
+        exclude_unset=True, exclude_none=True
+    ).items():
         setattr(task, key, value)
 
     session.commit()

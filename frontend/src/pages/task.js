@@ -64,8 +64,13 @@ export default function TaskPage() {
         headers: {
           Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
         },
-      }).then(() => {
-        navigate("/");
+      }).then(async (response) => {
+        if (response.ok) {
+          navigate("/");
+        } else {
+          document.querySelector(".error-message").textContent =
+            await response.text();
+        }
       });
     } else {
       if (!taskId || taskId.length === 0) {

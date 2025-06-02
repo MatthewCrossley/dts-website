@@ -1,44 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setAuth } from '../utils/auth';
+import { setAuth } from "../utils/auth";
 
 export default function Register() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return
+      setError("Passwords do not match");
+      return;
     }
 
     try {
-      const response = await fetch('http://localhost:8000/users/', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/users/", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           username: username,
-          password: password
-        })
+          password: password,
+          admin: isAdmin,
+        }),
       });
 
       if (response.ok) {
         const userId = await response.json();
-        setAuth({id: userId, username: username, password: password});
-        navigate('/');
+        setAuth({ id: userId, username: username, password: password });
+        navigate("/");
       } else {
         setError((await response.json()).detail);
       }
     } catch (error) {
       console.error(error);
-      setError('Error: ' + error);
+      setError("Error: " + error);
     }
   };
 
@@ -73,7 +75,17 @@ export default function Register() {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        <button type="submit">Login</button>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={isAdmin}
+              onChange={(e) => setIsAdmin(e.target.checked)}
+            />
+            User is admin
+          </label>
+        </div>
+        <button type="submit">Register</button>
         <span className="error-message">{error}</span>
       </form>
     </div>
