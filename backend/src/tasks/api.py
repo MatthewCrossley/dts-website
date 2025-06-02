@@ -48,13 +48,13 @@ def delete_task(task_id: UUID4, session: DBSessionDep, user: AuthCheckDep) -> No
         logger.warning(f"Task with ID {task_id} not found")
         raise HTTPException(status_code=404, detail="User not found")  #
 
-    if not (task.created_by == user.id or task.assigned_to == user.id or user.admin):
+    if not user.admin:
         logger.warning(
             f"User {user.username} not authorized to delete task {task.title!r}"
         )
         raise HTTPException(
             status_code=403,
-            detail="Not authorized to delete this task. You must be the creator, assigned user or an admin",
+            detail="Not authorized to delete this task. You must be an admin",
         )
 
     session.delete(task)

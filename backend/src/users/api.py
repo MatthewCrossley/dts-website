@@ -70,13 +70,13 @@ def delete_user(user_id: UUID4, session: DBSessionDep, user: AuthCheckDep) -> No
         logger.warning(f"User with ID {user_id} not found")
         raise HTTPException(status_code=404, detail="User not found")
 
-    if user_to_delete.id != user.id and not user.admin:
+    if not user.admin:
         logger.warning(
             f"User {user_to_delete.username} not authorized to delete user with ID {user_id}"
         )
         raise HTTPException(
             status_code=403,
-            detail="Not authorized to delete this user. You are not an admin or the user being deleted",
+            detail="Not authorized to delete this user. You are not an admin",
         )
     session.delete(user_to_delete)
     session.commit()
