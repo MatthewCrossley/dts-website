@@ -1,33 +1,35 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { setAuth } from '../utils/auth';
+import "../styles/login.css";
+import { setAuth } from "../utils/auth";
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8000/users/current', {
-        method: 'GET',
+      const response = await fetch("http://localhost:8000/users/current", {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Basic ${btoa(`${username}:${password}`)}`
-        }
+          "Content-Type": "application/json",
+          Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+        },
       });
 
       if (response.ok) {
         const userData = await response.json();
         setAuth(userData);
-        navigate('/');
+        navigate("/");
       } else {
-        document.querySelector('.error-message').textContent = 'Invalid username or password';
+        document.querySelector(".error-message").textContent =
+          "Invalid username or password";
       }
     } catch (error) {
-      document.querySelector('.error-message').textContent = 'Error: ' + error;
+      document.querySelector(".error-message").textContent = "Error: " + error;
     }
   };
 

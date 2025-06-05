@@ -1,0 +1,22 @@
+nav {
+  background-color: #f0f0f0;
+  padding: 10px;
+  display: flex;
+}
+
+nav a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+nav .nav-links {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+nav .login-notice {
+  margin-right: 8px;
+}

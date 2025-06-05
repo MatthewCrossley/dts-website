@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAuth } from "../utils/auth";
 
 import { useNavigate, useParams } from "react-router-dom";
+import "../styles/task.css";
 
 export default function TaskPage() {
   const { taskId } = useParams();
@@ -116,7 +117,7 @@ export default function TaskPage() {
   }
 
   return (
-    <>
+    <div className="task-container">
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Title:</label>
@@ -194,6 +195,6 @@ export default function TaskPage() {
         </button>
         <div className="error-message"></div>
       </form>
-    </>
+    </div>
   );
 }

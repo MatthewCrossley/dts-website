@@ -1,0 +1,18 @@
+.error-message {
+  color: red;
+}
+
+/* general forms */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: #fff;
+  max-width: 400px;
+}
+
+form label {
+  font-weight: bold;
+  margin-right: 8px;
+}

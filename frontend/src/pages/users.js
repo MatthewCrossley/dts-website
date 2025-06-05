@@ -18,7 +18,7 @@ export default function UserPage() {
   }, []);
 
   return (
-    <div>
+    <div className="task-container">
       <h1>Users</h1>
       <div class="task-list">
         {users.map((user) => (

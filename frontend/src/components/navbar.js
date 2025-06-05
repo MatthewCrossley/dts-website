@@ -1,5 +1,7 @@
 import { clearAuth, getAuth } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import '../styles/navbar.css';
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -13,23 +15,16 @@ export default function NavBar() {
   return (
     <div>
       <nav>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/login">Login</a>
-          </li>
-          <li>
-            <a href="/register">Register</a>
-          </li>
-          <li>
-            <a href="/users">Users</a>
-          </li>
-        </ul>
+        <span className="nav-links">
+          <Link to="/">Home</Link>
+          <Link to="/task">Create Task</Link>
+          <Link to="/login">Login</Link>
+          <Link to="/register">Register</Link>
+          <Link to="/users">Users</Link>
+        </span>
+        {auth && <span className="login-notice">Logged in as {auth.username}</span>}
+        <button onClick={() => handleLogout()}>Logout</button>
       </nav>
-      {auth && <span>Logged in as {auth.username}</span>}
-      <button onClick={() => handleLogout()}>Logout</button>
     </div>
   );
 }

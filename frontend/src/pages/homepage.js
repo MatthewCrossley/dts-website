@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getAuth } from "../utils/auth";
 import Task from "../components/task";
+import "../styles/task.css";
 
 export default function HomePage() {
   const [tasks, setTasks] = useState([]);
@@ -17,13 +18,10 @@ export default function HomePage() {
       .catch((error) => console.error("Error fetching tasks:", error));
   }, []);
 
-
   return (
-    <div>
-      <span><h1>Your Tasks</h1>
-      <a href="/task">Create Task</a>
-      </span>
-      <div class="task-list">
+    <div className="task-container">
+      <h1>Your Tasks</h1>
+      <div className="task-list">
         {tasks.map((task) => (
           <Task task={task} />
         ))}
