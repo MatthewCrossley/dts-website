@@ -37,7 +37,11 @@ export default function Register() {
         setAuth({ id: userId, username: username, password: password });
         navigate("/");
       } else {
-        setError((await response.json()).detail);
+        let error = (await response.json()).detail;
+        if (Array.isArray(error)) {
+          error = error[0];
+        }
+        setError(error.loc.join(".") + ": " + error.msg);
       }
     } catch (error) {
       console.error(error);

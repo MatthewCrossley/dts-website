@@ -72,8 +72,17 @@ export default function TaskPage() {
         if (response.ok) {
           navigate("/");
         } else {
-          document.querySelector(".error-message").textContent =
-            await response.text();
+          let error = (await response.json()).detail;
+          let errorMessage = "";
+          if (Array.isArray(error)) {
+            error = error[0];
+          }
+          if (typeof error === "string") {
+            errorMessage = error;
+          } else {
+            errorMessage = error.loc.join(".") + ": " + error.msg;
+          }
+          document.querySelector(".error-message").textContent = errorMessage;
         }
       });
     } else {
@@ -98,8 +107,17 @@ export default function TaskPage() {
       }
       request = request.then(async (response) => {
         if (!response.ok) {
-          document.querySelector(".error-message").textContent =
-            await response.text();
+          let error = (await response.json()).detail;
+          let errorMessage = "";
+          if (Array.isArray(error)) {
+            error = error[0];
+          }
+          if (typeof error === "string") {
+            errorMessage = error;
+          } else {
+            errorMessage = error.loc.join(".") + ": " + error.msg;
+          }
+          document.querySelector(".error-message").textContent = errorMessage;
           return;
         }
 
@@ -190,9 +208,11 @@ export default function TaskPage() {
 
         <button type="submit">Save Changes</button>
         <br />
-        <button type="submit" id="delete">
-          Delete task
-        </button>
+        {taskId && taskId.length > 0 ? (
+          <button type="submit" id="delete">
+            Delete task
+          </button>
+        ) : null}
         <div className="error-message"></div>
       </form>
     </div>
