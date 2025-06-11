@@ -22,9 +22,7 @@ export default function HomePage() {
     <div className="task-container">
       <h1>Your Tasks</h1>
       <div className="task-list">
-        {tasks.map((task) => (
-          <Task task={task} />
-        ))}
+        {Array.isArray(tasks) && tasks.map((task) => <Task task={task} />)}
       </div>
     </div>
   );
