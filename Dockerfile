@@ -3,10 +3,11 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm
 
-COPY frontend /frontend/
+COPY . /frontend/
 RUN chmod -R 755 /frontend/
 
 WORKDIR /frontend
+RUN npm cache clean --force
 RUN npm install && npm run build
 
 EXPOSE 3000
