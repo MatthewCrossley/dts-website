@@ -8,7 +8,7 @@ export default function HomePage() {
   const auth = getAuth();
 
   useEffect(() => {
-    fetch("http://localhost:8000/tasks/", {
+    fetch("https://human-canidae-matthewcrossley-75876ff3.koyeb.app/tasks/", {
       headers: {
         Authorization: `Basic ${btoa(`${auth.username}:${auth.password}`)}`,
       },

@@ -6,7 +6,7 @@ export default function ProtectedRoute({ children }) {
   const auth = getAuth();
 
   if (auth) {
-    fetch("http://localhost:8000/users/current", {
+    fetch("https://human-canidae-matthewcrossley-75876ff3.koyeb.app/users/current", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

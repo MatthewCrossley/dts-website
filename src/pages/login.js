@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/users/current", {
+      const response = await fetch("https://human-canidae-matthewcrossley-75876ff3.koyeb.app/users/current", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

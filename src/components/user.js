@@ -7,7 +7,7 @@ export default function User({ user }) {
     if (
       window.confirm(`Are you sure you want to delete user ${user.username}?`)
     ) {
-      fetch(`http://localhost:8000/users/${user.id}`, {
+      fetch(`https://human-canidae-matthewcrossley-75876ff3.koyeb.app/users/${user.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Basic ${btoa(
