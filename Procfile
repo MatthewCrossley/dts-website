@@ -1,1 +1,1 @@
-web: /backend/.venv/bin/python -m fastapi run src/main.py
+web: python -m fastapi run src/main.py

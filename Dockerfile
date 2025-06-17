@@ -1,16 +1,13 @@
 FROM debian:12
 RUN apt-get update && apt-get install -y \
     python3 \
-    python3-pip \
-    python3-venv
+    python3-pip
 
 COPY . /backend/
 RUN chmod -R 755 /backend/
 
 WORKDIR /backend
-RUN python3 -m venv .venv && \
-    . .venv/bin/activate && \
-    pip install --upgrade pip && \
+RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 COPY run.sh /run.sh
@@ -18,5 +15,5 @@ COPY run.sh /run.sh
 EXPOSE 3000
 EXPOSE 8000
 
-ENTRYPOINT ["/backend/.venv/bin/python"]
+ENTRYPOINT ["python"]
 CMD ["-m", "fastapi", "run", "src/main.py"]
