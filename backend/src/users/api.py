@@ -1,8 +1,8 @@
 import logging
 
-from auth import AuthCheckDep
-from db import DBSessionDep
-from db.models import User, UserCreate, UserPublic, UserUpdate
+from ..auth import AuthCheckDep
+from ..db import DBSessionDep
+from ..db.models import User, UserCreate, UserPublic, UserUpdate
 from fastapi import APIRouter, HTTPException
 from pydantic import UUID4
 from sqlmodel import select

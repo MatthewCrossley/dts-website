@@ -1,8 +1,8 @@
 import logging
 from typing import Annotated
 
-from db import DBSessionDep
-from db.models import User
+from .db import DBSessionDep
+from .db.models import User
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlmodel import select

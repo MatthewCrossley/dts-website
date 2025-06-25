@@ -1,8 +1,8 @@
 import logging
 
-from auth import AuthCheckDep
-from db import DBSessionDep
-from db.models import Task, TaskCreate, TaskPublic, TaskUpdate
+from ..auth import AuthCheckDep
+from ..db import DBSessionDep
+from ..db.models import Task, TaskCreate, TaskPublic, TaskUpdate
 from fastapi import APIRouter, HTTPException
 from pydantic import UUID4
 from sqlmodel import select

@@ -36,3 +36,11 @@ And the backend:
 cd backend
 python -m fastapi run src/main.py
 ```
+
+## Testing
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+pytest
+```

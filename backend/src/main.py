@@ -1,12 +1,12 @@
 import logging
 import sys
 
-from auth import auth_check
-from db import startup as db_startup
+from .auth import auth_check
+from .db import startup as db_startup
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from tasks.api import router as tasks_router
-from users.api import router as users_router
+from .tasks.api import router as tasks_router
+from .users.api import router as users_router
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
