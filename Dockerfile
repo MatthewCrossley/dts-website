@@ -13,5 +13,7 @@ RUN npm install && npm run build
 EXPOSE 3000
 # EXPOSE 8000
 
+RUN npm install -g serve
+
 ENTRYPOINT ["npm"]
-CMD ["run", "start"]
+CMD ["run", "serve"]
