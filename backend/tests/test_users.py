@@ -2,7 +2,7 @@ from uuid import uuid4
 from fastapi import HTTPException
 import pytest
 from pytest_mock import MockerFixture
-from db.models import User
+from src.db.models import User
 from src.users import api
 from mocks import MockSessionOrTable
 
