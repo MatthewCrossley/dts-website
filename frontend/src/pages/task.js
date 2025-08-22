@@ -106,7 +106,9 @@ export default function TaskPage() {
         });
       }
       request = request.then(async (response) => {
-        if (!response.ok) {
+        if (response.ok) {
+          navigate(`/`);
+        } else {
           let error = (await response.json()).detail;
           let errorMessage = "";
           if (Array.isArray(error)) {
@@ -119,12 +121,6 @@ export default function TaskPage() {
           }
           document.querySelector(".error-message").textContent = errorMessage;
           return;
-        }
-
-        if (!taskId || taskId.length === 0) {
-          navigate(`/task/${await response.json()}`);
-        } else {
-          setTask(await response.json());
         }
       });
     }

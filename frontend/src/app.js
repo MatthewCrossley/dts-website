@@ -6,7 +6,6 @@ import HomePage from "./pages/homepage";
 import LoginPage from "./pages/login";
 import TaskPage from "./pages/task";
 import RegisterPage from "./pages/register";
-import UserPage from "./pages/users";
 
 export default function App() {
   return (
@@ -28,15 +27,6 @@ export default function App() {
           element={
             <ProtectedRoute>
               <TaskPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/users/"
-          element={
-            <ProtectedRoute>
-              <UserPage />
             </ProtectedRoute>
           }
         />

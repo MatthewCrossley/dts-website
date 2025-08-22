@@ -20,7 +20,6 @@ export default function NavBar() {
           <Link to="/task">Create Task</Link>
           <Link to="/login">Login</Link>
           <Link to="/register">Register</Link>
-          <Link to="/users">Users</Link>
         </span>
         {auth && (
           <span className="login-notice">
