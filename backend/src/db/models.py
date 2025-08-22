@@ -1,10 +1,13 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
+from pydantic import ConfigDict
 from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     username: str = Field(index=True, unique=True, min_length=5, max_length=128)
 
 
@@ -30,6 +33,8 @@ class UserPublic(UserBase):
 
 
 class TaskBase(SQLModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
     title: str = Field(index=True, min_length=1, max_length=256)
     description: str | None = Field(default=None, max_length=2048)
     assigned_to: UUID | None = Field(foreign_key="user.id")

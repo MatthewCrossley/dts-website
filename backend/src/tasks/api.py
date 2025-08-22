@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 from ..auth import AuthCheckDep
@@ -17,6 +18,14 @@ def create_task(
     task_details: TaskCreate, session: DBSessionDep, user: AuthCheckDep
 ) -> UUID4:
     task = Task(created_by=user.id, **task_details.model_dump(exclude_unset=True))
+
+    if task.due is not None and task.due.astimezone(
+        datetime.timezone.utc
+    ) <= datetime.datetime.now(datetime.timezone.utc):
+        raise HTTPException(
+            status_code=400, detail="Task due date must be in the future"
+        )
+
     session.add(task)
     session.commit()
     session.refresh(task)
@@ -76,7 +85,15 @@ def update_task(
             f"User {user.username} not authorized to update task {task.title!r}"
         )
         raise HTTPException(
-            status_code=403, detail="Not authorized to update this task. You must be the creator, assigned user or an admin"
+            status_code=403,
+            detail="Not authorized to update this task. You must be the creator, assigned user or an admin",
+        )
+
+    if task_details.due is not None and task_details.due.astimezone(
+        datetime.timezone.utc
+    ) <= datetime.datetime.now(datetime.timezone.utc):
+        raise HTTPException(
+            status_code=400, detail="Task due date must be in the future"
         )
 
     for key, value in task_details.model_dump(
