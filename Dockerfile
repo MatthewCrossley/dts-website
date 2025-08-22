@@ -24,5 +24,5 @@ COPY run.sh /run.sh
 EXPOSE 3000
 EXPOSE 8000
 
-# ENTRYPOINT ["bash"]
-# CMD ["run.sh"]
+ENTRYPOINT ["bash"]
+CMD ["run.sh"]

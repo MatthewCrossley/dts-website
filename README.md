@@ -2,8 +2,6 @@
 
 Simple app that tracks tasks for different users.
 
-You can view the hosted app at https://dts-website.onrender.com/
-
 ## Setup
 
 You will need Python>=3.10 and a recent version of NodeJS installed.
